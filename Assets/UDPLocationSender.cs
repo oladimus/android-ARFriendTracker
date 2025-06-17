@@ -29,20 +29,8 @@ public class UDPLocationSender : MonoBehaviour
         string message = $"{SystemInfo.deviceUniqueIdentifier}:{lm.latitude}:{lm.longitude}:{lm.heading}";
         byte[] data = Encoding.UTF8.GetBytes(message);
         Debug.Log($"Sending to {mylaptopIP}:{port} {message}");
+        Debug.Log($"Sending to {targetIP}:{port} {message}");
         udpClient.Send(data, data.Length, mylaptopIP, port);
         udpClient.Send(data, data.Length, targetIP, port);
-
-#if UNITY_EDITOR
-        string id = "FAKE_EDITOR_ID";
-        float lat = 61.49626f;
-        float lon = 23.77689f;
-        float heading = 0;
-
-        string msg = $"{id}:{lat}:{lon}:{heading}";
-        byte[] dat = Encoding.UTF8.GetBytes(msg);
-        udpClient.Send(dat, dat.Length, mylaptopIP, port);
-        udpClient.Send(dat, dat.Length, targetIP, port);
-
-#endif
     }
 }

@@ -8,7 +8,7 @@ public class UDPLocationReceiver : MonoBehaviour
 {
     public int port = 9050;
     UdpClient udpClient;
-
+    
     [Header("Prefabs for known friends")]
     public GameObject alicePrefab;
     public GameObject bobPrefab;
@@ -21,7 +21,7 @@ public class UDPLocationReceiver : MonoBehaviour
         udpClient = new UdpClient(port);
         udpClient.Client.Blocking = false; // Make Receive non-blocking
     }
-
+    
     void Update()
     {
         while (udpClient.Available > 0)
@@ -40,20 +40,19 @@ public class UDPLocationReceiver : MonoBehaviour
             float heading = float.Parse(parts[3]);
 
             Vector3 pos = GPSUtils.GPSToUnityPosition(lat, lon);
-            Debug.Log("ASDASD");
+
             if (!friends.ContainsKey(id))
             {
-                Debug.Log("BBBB");
                 GameObject prefabToUse = null;
 
-                if (id == "faac94c364ac4d71135a1e5cbf797d8e") // Replace with real ID
+                if (id == "593b7502f6706630ec3fdf4c8beba02d")
                     prefabToUse = alicePrefab;
-                else if (id == "9a8a2f9c6e7eced8cb424ebc689031c7")
+                else if (id == "bob")
                     prefabToUse = bobPrefab;
-                else if (id == "FAKE_EDITOR_ID")
+                else if (id == "fake")
                     prefabToUse = fakePrefab;
                 else
-                    prefabToUse = bobPrefab;
+                    continue;
                     //continue; // Unknown user
 
                 GameObject go = Instantiate(prefabToUse);
@@ -62,9 +61,9 @@ public class UDPLocationReceiver : MonoBehaviour
             } else
             {
                 Debug.Log($"Updated position for ID: {id} to {pos}");
+                friends[id].transform.position = pos;
             }
 
-                friends[id].transform.position = pos;
         }
     }
 }
