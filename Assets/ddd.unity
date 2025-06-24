@@ -190,8 +190,8 @@ GameObject:
   - component: {fileID: 754710481}
   - component: {fileID: 754710480}
   - component: {fileID: 754710479}
-  - component: {fileID: 754710478}
   - component: {fileID: 754710477}
+  - component: {fileID: 754710482}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -212,24 +212,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   port: 9050
-  alicePrefab: {fileID: 4534381102710117630, guid: 7fec3cebdfa30704e93b564bb5dc8722, type: 3}
+  alicePrefab: {fileID: 4534381102710117630, guid: 0cc85a4a3f4974447bfcedde6a4cefca, type: 3}
   bobPrefab: {fileID: 4534381102710117630, guid: 7fec3cebdfa30704e93b564bb5dc8722, type: 3}
-  fakePrefab: {fileID: 4534381102710117630, guid: 7fec3cebdfa30704e93b564bb5dc8722, type: 3}
---- !u!114 &754710478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 754710476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5284360066e9b984191da787fd32e992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetIP: 192.168.101.171
-  mylaptopIP: 192.168.101.119
-  port: 9050
+  fakePrefab: {fileID: 4534381102710117630, guid: daba1fb161a3c554297f8870e8b40722, type: 3}
 --- !u!114 &754710479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +263,21 @@ Transform:
   - {fileID: 1358822126}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &754710482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754710476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5284360066e9b984191da787fd32e992, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetIP: 10.149.109.217
+  mylaptopIP: 192.168.101.119
+  port: 9050
 --- !u!1 &921631729
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,8 +486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966719baa26e4b0e8231a24d9bd491a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FocusMode: 1
-  m_LightEstimationMode: 0
+  m_FocusMode: -1
+  m_LightEstimationMode: -1
   m_AutoFocus: 1
   m_ImageStabilization: 0
   m_LightEstimation: 0

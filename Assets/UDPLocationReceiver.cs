@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Net;
 using System.Collections.Generic;
+using TMPro;
 
 public class UDPLocationReceiver : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class UDPLocationReceiver : MonoBehaviour
     public GameObject alicePrefab;
     public GameObject bobPrefab;
     public GameObject fakePrefab;
+    public TextMeshProUGUI distanceText;
 
     Dictionary<string, GameObject> friends = new();
 
@@ -45,14 +47,14 @@ public class UDPLocationReceiver : MonoBehaviour
             {
                 GameObject prefabToUse = null;
 
-                if (id == "593b7502f6706630ec3fdf4c8beba02d")
+                if (id == "faac94c364ac4d71135a1e5cbf797d8e")
                     prefabToUse = alicePrefab;
                 else if (id == "bob")
                     prefabToUse = bobPrefab;
                 else if (id == "fake")
                     prefabToUse = fakePrefab;
                 else
-                    continue;
+                    prefabToUse = bobPrefab;
                     //continue; // Unknown user
 
                 GameObject go = Instantiate(prefabToUse);
@@ -62,6 +64,13 @@ public class UDPLocationReceiver : MonoBehaviour
             {
                 Debug.Log($"Updated position for ID: {id} to {pos}");
                 friends[id].transform.position = pos;
+
+                var myLat = LocationManager.Instance.latitude;
+                var myLon = LocationManager.Instance.longitude;
+
+                float dist = GPSUtils.HaversineDistance(myLat, myLon, lat, lon);
+                distanceText.text = $"{dist:F1} m";
+
             }
 
         }

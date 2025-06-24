@@ -5,7 +5,7 @@ using System.Net;
 
 public class UDPLocationSender : MonoBehaviour
 {
-    public string targetIP; // Set this to your friend's device IP
+    public string targetIP = "192.168.101.69"; // Set this to your friend's device IP
     public string mylaptopIP = "192.168.101.119";
     public int port = 9050;
 
@@ -26,10 +26,17 @@ public class UDPLocationSender : MonoBehaviour
             Debug.LogWarning("LocationManager.Instance is null");
             return;
         }
-        string message = $"{SystemInfo.deviceUniqueIdentifier}:{lm.latitude}:{lm.longitude}:{lm.heading}";
+        string latStr = lm.latitude.ToString().Replace('.', ',');
+        string lonStr = lm.longitude.ToString().Replace('.', ',');
+        string headingStr = lm.heading.ToString().Replace('.', ',');
+
+        string message = $"{SystemInfo.deviceUniqueIdentifier}:{latStr}:{lonStr}:{headingStr}";
+
         byte[] data = Encoding.UTF8.GetBytes(message);
+
         Debug.Log($"Sending to {mylaptopIP}:{port} {message}");
         Debug.Log($"Sending to {targetIP}:{port} {message}");
+
         udpClient.Send(data, data.Length, mylaptopIP, port);
         udpClient.Send(data, data.Length, targetIP, port);
     }
