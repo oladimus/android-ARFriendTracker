@@ -32,7 +32,6 @@ public class ClientAnchorReceiver : MonoBehaviour
             {
                 byte[] data = udpClient.Receive(ref remoteEP);
                 string message = Encoding.UTF8.GetString(data);
-                Debug.Log(message);
 
                 string[] split = message.Split(':');
                 if (split.Length != 2) continue;
@@ -63,11 +62,15 @@ public class ClientAnchorReceiver : MonoBehaviour
                         ARAnchor receivedAnchor = go.GetComponent<ARAnchor>();
                         if (receivedAnchor == null)
                         {
+                            Debug.Log("receivedAnchor is null");
                             receivedAnchor = go.AddComponent<ARAnchor>();
                         }
                         Debug.Log($"Anchor instantiated at {position}");
 
-                        GetComponent<UDPLocationReceiver>().receivedAnchor = receivedAnchor;
+                        var receiver = GetComponent<UDPLocationReceiver>();
+                        receiver.receivedAnchor = receivedAnchor;
+                        receiver.StartReceiver();
+                        GetComponent<UDPLocationSender>().localAnchor = receivedAnchor;
                     }
                 });
             }

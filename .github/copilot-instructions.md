@@ -2,7 +2,7 @@
 - Project name: android-ARFriendTracker
 - Unity version: Unity 6000.1.5f1
 - Active game object:
-  - Name: XR Origin
+  - Name: OlariPrefab
   - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

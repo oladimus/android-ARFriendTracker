@@ -39,6 +39,9 @@ public class HostAnchorManager : MonoBehaviour
                 GetComponent<UDPLocationSender>().localAnchor = currentAnchor;
                 Debug.Log("Local host anchor sent to UDPLocationSender");
 
+                GetComponent<UDPLocationReceiver>().receivedAnchor = currentAnchor;
+                Debug.Log("Local host anchor sent to UDP location Receiver");
+
                 // Send the transform to clients
                 OnAnchorPlaced?.Invoke(pose.position, pose.rotation);
             }

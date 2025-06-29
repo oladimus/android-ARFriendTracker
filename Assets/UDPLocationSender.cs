@@ -21,7 +21,6 @@ public class UDPLocationSender : MonoBehaviour
     {
         if (localAnchor == null)
         {
-            Debug.Log("Anchor is null");
             return;
         }
 
@@ -39,6 +38,7 @@ public class UDPLocationSender : MonoBehaviour
         byte[] bytes = Encoding.UTF8.GetBytes(data);
         udpClient.Send(bytes, bytes.Length, targetIP, port);
         udpClient.Send(bytes, bytes.Length, "192.168.101.119", port); // laptop
+        
     }
 
     void OnApplicationQuit()

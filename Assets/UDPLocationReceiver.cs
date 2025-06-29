@@ -17,7 +17,7 @@ public class UDPLocationReceiver : MonoBehaviour
 
     private GameObject friendAvatar;
 
-    void Start()
+    public void StartReceiver()
     {
         udpClient = new UdpClient(port);
         receiveThread = new Thread(ReceiveLoop);
@@ -34,53 +34,69 @@ public class UDPLocationReceiver : MonoBehaviour
             {
                 byte[] data = udpClient.Receive(ref remoteEP);
                 string message = Encoding.UTF8.GetString(data);
+
+
                 ApplyRemotePose(message);
             }
-            catch { }
+            catch (System.Exception e)
+            {
+                UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                {
+                    Debug.LogError($"UDP receive error: {e}");
+                });
+            }
         }
     }
 
+
     void ApplyRemotePose(string message)
-    {
-        string[] split = message.Split(':');
-        if (split.Length != 2) return;
-
-        string[] posParts = split[0].Split(',');
-        string[] rotParts = split[1].Split(',');
-        if (posParts.Length != 3 || rotParts.Length != 4) return;
-
-        Vector3 relativePos = new Vector3(
-            float.Parse(posParts[0], CultureInfo.InvariantCulture),
-            float.Parse(posParts[1], CultureInfo.InvariantCulture),
-            float.Parse(posParts[2], CultureInfo.InvariantCulture)
-        );
-
-        Quaternion relativeRot = new Quaternion(
-            float.Parse(rotParts[0], CultureInfo.InvariantCulture),
-            float.Parse(rotParts[1], CultureInfo.InvariantCulture),
-            float.Parse(rotParts[2], CultureInfo.InvariantCulture),
-            float.Parse(rotParts[3], CultureInfo.InvariantCulture)
-        );
-
-        Vector3 worldPos = receivedAnchor.transform.TransformPoint(relativePos);
-        Quaternion worldRot = receivedAnchor.transform.rotation * relativeRot;
-
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            if (friendAvatar == null)
+            if (receivedAnchor == null)
             {
-                friendAvatar = Instantiate(friendAvatarPrefab, worldPos, worldRot);
+                Debug.LogWarning("Received anchor is null. Ignoring message.");
+                return;
             }
-            else
-            {
-                friendAvatar.transform.SetPositionAndRotation(worldPos, worldRot);
-            }
-        });
-    }
+            string[] split = message.Split(':');
+            if (split.Length != 2) return;
 
-    void OnApplicationQuit()
-    {
-        receiveThread.Abort();
-        udpClient.Close();
+            string[] posParts = split[0].Split(',');
+            string[] rotParts = split[1].Split(',');
+            if (posParts.Length != 3 || rotParts.Length != 4) return;
+
+            Vector3 relativePos = new Vector3(
+                float.Parse(posParts[0], CultureInfo.InvariantCulture),
+                float.Parse(posParts[1], CultureInfo.InvariantCulture),
+                float.Parse(posParts[2], CultureInfo.InvariantCulture)
+            );
+
+            Quaternion relativeRot = new Quaternion(
+                float.Parse(rotParts[0], CultureInfo.InvariantCulture),
+                float.Parse(rotParts[1], CultureInfo.InvariantCulture),
+                float.Parse(rotParts[2], CultureInfo.InvariantCulture),
+                float.Parse(rotParts[3], CultureInfo.InvariantCulture)
+            );
+
+            Vector3 worldPos = receivedAnchor.transform.TransformPoint(relativePos);
+            Quaternion worldRot = receivedAnchor.transform.rotation * relativeRot;
+
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                if (friendAvatar == null)
+                {
+                    friendAvatar = Instantiate(friendAvatarPrefab, worldPos, worldRot);
+                    Debug.Log("Instantiated FriendPreFab");
+                }
+                else
+                {
+                    friendAvatar.transform.SetPositionAndRotation(worldPos, worldRot);
+                    Debug.Log(worldPos);
+                }
+            });
+        }
+
+        void OnApplicationQuit()
+        {
+            receiveThread.Abort();
+            udpClient.Close();
+        }
     }
-}
